@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { User, Home, Award, Database, Image } from 'lucide-react';
+import Link from 'next/link'
+
 
 const PlatformPage = () => {
   const [activeTab, setActiveTab] = useState('tasks');
@@ -31,6 +33,9 @@ const PlatformPage = () => {
               >
                 Profile
               </button>
+              <Link href="/api/auth/logout" className={`px-3 py-2 rounded-md ${activeTab === 'profile' ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}>
+                LOGOUT
+              </Link>
             </nav>
           </div>
         </div>
