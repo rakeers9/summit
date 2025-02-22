@@ -21,17 +21,22 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="px-6 py-20 bg-white">
-      <h2 className="text-3xl font-bold text-center mb-12">Why Choose Us</h2>
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-        {features.map((feature) => (
-          <Card key={feature.title} className="p-6">
-            <feature.icon className="h-8 w-8 text-blue-600 mb-4" />
-            <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-            <p className="text-gray-600">{feature.description}</p>
-          </Card>
-        ))}
+    <section className="relative section-spacing">
+      <div className="content-container">
+        <div className="grid md:grid-cols-3 gap-8">
+          {features.map((feature) => (
+            <div key={feature.title} className="modern-card p-8">
+              <feature.icon className="h-8 w-8 mb-4 text-[var(--gradient-end)]" />
+              <h3 className="text-xl font-semibold mb-3 text-text-dark">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
-  )
+  );
 }

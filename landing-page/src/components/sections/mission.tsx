@@ -9,23 +9,23 @@ const benefits = [
 
 export function Mission() {
   return (
-    <section id="mission" className="px-6 py-20 bg-blue-50">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-8">Our Mission</h2>
-        <p className="text-lg text-gray-700 mb-8 text-center">
-          We're transforming the data labeling industry by creating an ethical, 
-          engaging platform that values both the quality of data and the wellbeing 
-          of our contributors.
-        </p>
-        <div className="grid gap-4">
-          {benefits.map((benefit) => (
-            <div key={benefit} className="flex items-center gap-3 bg-white p-4 rounded-lg">
-              <Check className="text-green-500 flex-shrink-0" />
-              <span className="text-gray-700">{benefit}</span>
-            </div>
-          ))}
+    <section className="relative section-spacing">
+      <div className="content-container">
+        <div className="modern-card p-12 max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
+          <div className="space-y-4">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="flex items-center gap-4 p-4 rounded-lg bg-white/50">
+                <div className="score-indicator">
+                  <div className="score-dot" />
+                  <div className="score-line" />
+                </div>
+                <span className="text-gray-800">{benefit}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

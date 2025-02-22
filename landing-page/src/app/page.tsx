@@ -3,15 +3,22 @@ import { Hero } from '@/components/sections/hero'
 import { Features } from '@/components/sections/features'
 import { Mission } from '@/components/sections/mission'
 import { Footer } from '@/components/layout/footer'
+import './globals.css';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-blue-50">
+    <div className="min-h-screen">
+      {/* Background with scroll effect */}
+      <div className="fixed inset-0 bg-gradient-to-b from-[#E08D9D] via-[#B4C5D4] to-[#25C6CE] -z-10" />
+      <div className="fixed inset-0 bg-black/10 -z-5" /> {/* Subtle overlay */}
+      
       <Navbar />
-      <Hero />
-      <Features />
-      <Mission />
-      <Footer />
-    </main>
-  )
+      <main>
+        <Hero />
+        <Features />
+        <Mission />
+        <Footer />
+      </main>
+    </div>
+  );
 }
