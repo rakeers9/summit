@@ -14,9 +14,10 @@ export function Navbar() {
         <Link href="#mission" className="text-gray-600 hover:text-blue-600">
           Our Mission
         </Link>
-        <Link href="/app" className="text-gray-600 hover:text-blue-600">
-          App
+        <Link href="/api/auth/login" className="text-gray-600 hover:text-blue-600">
+          LOGIN
         </Link>
+        <a href="/api/auth/login">Login</a>
       </div>
     </nav>
   )
