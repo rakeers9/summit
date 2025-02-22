@@ -1,6 +1,6 @@
 import 'package:boilermakexii_2/profile.dart';
+import 'package:boilermakexii_2/start.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 
 import 'home.dart';
 
@@ -86,19 +86,6 @@ class _MainScreenState extends State<MainScreen> {
             onTap: _onItemTapped,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class StartPage extends StatelessWidget {
-  const StartPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Start Page', style: TextStyle(color: Colors.white)),
       ),
     );
   }
