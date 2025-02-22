@@ -1,3 +1,4 @@
+import 'package:boilermakexii_2/const.dart';
 import 'package:flutter/material.dart';
 
 class StartPage extends StatefulWidget {
@@ -15,6 +16,7 @@ class _StartPageState extends State<StartPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Stack(
@@ -51,7 +53,7 @@ class _StartPageState extends State<StartPage> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.grey[400],
+                  color: kAccentBlue.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -63,8 +65,9 @@ class _StartPageState extends State<StartPage> {
                 ),
                 child: TextField(
                   textAlign: TextAlign.center,
-                  cursorColor: Colors.black,
+                  cursorColor: Colors.white,
                   decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
                     hintText: "Classify the Image",
                     border: InputBorder.none,
                   ),

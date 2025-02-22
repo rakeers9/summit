@@ -1,7 +1,9 @@
+import 'package:boilermakexii_2/const.dart';
 import 'package:boilermakexii_2/profile.dart';
 import 'package:boilermakexii_2/settings.dart';
 import 'package:boilermakexii_2/start.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'home.dart';
 
@@ -21,10 +23,10 @@ class MyApp extends StatelessWidget {
           primary: Colors.amber,
         ),
         scaffoldBackgroundColor: Colors.black,
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.white),
-          bodyMedium: TextStyle(color: Colors.white),
-          bodySmall: TextStyle(color: Colors.white),
+        textTheme: GoogleFonts.mandaliTextTheme().copyWith(
+          bodyLarge: GoogleFonts.mandali(color: Colors.white),
+          bodyMedium: GoogleFonts.mandali(color: Colors.white),
+          bodySmall: GoogleFonts.mandali(color: Colors.white),
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -61,12 +63,12 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: kBackgroundColor,
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
         color: Colors.black,
         child: Theme(
-          data: Theme.of(context).copyWith(canvasColor: Colors.black, splashColor: Colors.transparent, highlightColor: Colors.transparent,),
+          data: Theme.of(context).copyWith(canvasColor: kBackgroundColor, splashColor: Colors.transparent, highlightColor: Colors.transparent,),
           child: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ""),
@@ -75,14 +77,14 @@ class _MainScreenState extends State<MainScreen> {
               BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: ""),
             ],
             currentIndex: _selectedIndex,
-            selectedItemColor: Colors.amberAccent,
+            selectedItemColor: kLightBlue,
             selectedFontSize: 0,
             unselectedFontSize: 0,
             enableFeedback: true,
             showSelectedLabels: false,
             showUnselectedLabels: false,
-            unselectedItemColor: Colors.grey,
-            backgroundColor: Colors.black,
+            unselectedItemColor: kAccentBlue,
+            backgroundColor: kBackgroundColor,
             iconSize: 30,
             onTap: _onItemTapped,
           ),

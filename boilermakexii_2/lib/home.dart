@@ -1,5 +1,8 @@
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'const.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -34,31 +37,36 @@ class _HomePageState extends State<HomePage> {
     double trophiesFontsize = size.width * 0.05;
 
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Trophies", style: TextStyle(fontSize: trophiesFontsize),),
-                    Text("23", style: TextStyle(fontSize: trophiesFontsize),),
-                  ],
-                ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Trophies", style: TextStyle(fontSize: trophiesFontsize),),
+                  Text("23", style: TextStyle(fontSize: trophiesFontsize),),
+                ],
               ),
-              CarouselSlider(
-                options: CarouselOptions(
-                  aspectRatio: 3/3,
-                  enlargeCenterPage: true,
-                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                  enlargeFactor: 0.3,
-                ),
-                items: imageSliders,
+            ),
+            CarouselSlider(
+              options: CarouselOptions(
+                aspectRatio: 3/3,
+                enlargeCenterPage: true,
+                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                autoPlayAnimationDuration: Duration(seconds: 1),
+                autoPlayCurve: Curves.easeInOutCirc,
+                enlargeFactor: 0.2,
+                autoPlay: true,
+                viewportFraction: 0.7,
               ),
-              Padding(
+              items: imageSliders,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
                 child: SizedBox(
                   width: size.width,
@@ -68,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      backgroundColor: Colors.amberAccent,
+                      backgroundColor: kAccentBlue,
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     ),
                     onPressed: () {
@@ -76,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Text(
                       "Get Started",
-                      style: TextStyle(
+                      style: GoogleFonts.mandali(
                         color: Colors.black,
                         fontSize: size.height * 0.02,
                         fontWeight: FontWeight.w300,
@@ -85,11 +93,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              InfoCard(imageUrl: 'https://picsum.photos/200', line1: "Lane McCormick", line2: "10", line3: "101"),
-              InfoCard(imageUrl: 'https://picsum.photos/200', line1: "Bob Dale", line2: "12", line3: "45"),
-              // InfoCard(imageUrl: 'https://picsum.photos/200', line1: "Johnathan Crook", line2: "15", line3: "20"),
-            ],
-          ),
+            ),
+            InfoCard(imageUrl: 'https://picsum.photos/200/300', line1: "Lane McCormick", line2: "10", line3: "101"),
+            InfoCard(imageUrl: 'https://picsum.photos/200/400', line1: "Bob Dale", line2: "12", line3: "45"),
+          ],
         ),
       ),
     );
@@ -114,29 +121,36 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.black,
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(imageUrl),
-              radius: 30,
-            ),
-            SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(line1, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                Text("Recent Cash Out: \$$line2", style: TextStyle(color: Colors.white, fontSize: 14)),
-                Text("Current Trophies: $line3", style: TextStyle(color: Colors.white, fontSize: 14)),
-              ],
-            ),
-          ],
+
+    Size size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+      child: Card(
+        color: kBackgroundColor,
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(imageUrl),
+                radius: 30,
+              ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(line1, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text("Recent Cash Out: \$$line2", style: TextStyle(color: Colors.white, fontSize: 14)),
+                  Text("Current Trophies: $line3", style: TextStyle(color: Colors.white, fontSize: 14)),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:boilermakexii_2/const.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatelessWidget {
@@ -19,6 +20,7 @@ class UserProfile extends StatelessWidget {
     int score = 56;
 
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -88,7 +90,7 @@ class UserProfile extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          backgroundColor: Colors.amberAccent,
+                          backgroundColor: kAccentBlue,
                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         ),
                         onPressed: () {
@@ -97,7 +99,7 @@ class UserProfile extends StatelessWidget {
                         child: Text(
                           "Cash Out",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: size.height * 0.02,
                             fontWeight: FontWeight.w300,
                           ),
@@ -115,7 +117,7 @@ class UserProfile extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          backgroundColor: Colors.amberAccent,
+                          backgroundColor: kAccentBlue,
                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         ),
                         onPressed: () {
@@ -124,7 +126,7 @@ class UserProfile extends StatelessWidget {
                         child: Text(
                           "Edit Profile",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: size.height * 0.02,
                             fontWeight: FontWeight.w300,
                           ),
@@ -184,7 +186,7 @@ class ProfileInfoCard extends StatelessWidget {
     }
 
     return Card(
-      color: Colors.black,
+      color: kBackgroundColor,
       elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -198,7 +200,7 @@ class ProfileInfoCard extends StatelessWidget {
                   child: Icon(
                     icons,
                     size: 60,
-                    color: Colors.grey[700],
+                    color: kLightBlue,
                   ),
                 ),
                 SizedBox(width: 12),
