@@ -1,4 +1,5 @@
 import 'package:boilermakexii_2/profile.dart';
+import 'package:boilermakexii_2/settings.dart';
 import 'package:boilermakexii_2/start.dart';
 import 'package:flutter/material.dart';
 
@@ -86,19 +87,6 @@ class _MainScreenState extends State<MainScreen> {
             onTap: _onItemTapped,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Settings Page', style: TextStyle(color: Colors.white)),
       ),
     );
   }
