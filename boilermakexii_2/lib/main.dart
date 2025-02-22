@@ -63,18 +63,43 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: _pages[_selectedIndex],
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              "assets/background.jpg", // Make sure this path is correct
+              fit: BoxFit.fill, // Adjust fit as needed
+            ),
+          ),
+          _pages[_selectedIndex],
+        ],
+      ),
       bottomNavigationBar: Container(
         color: Colors.black,
         child: Theme(
-          data: Theme.of(context).copyWith(canvasColor: kBackgroundColor, splashColor: Colors.transparent, highlightColor: Colors.transparent,),
+          data: Theme.of(context).copyWith(
+            canvasColor: kBackgroundColor,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
           child: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ""),
-              BottomNavigationBarItem(icon: Icon(Icons.circle_outlined), label: ""),
-              BottomNavigationBarItem(icon: Icon(Icons.person_outlined), label: ""),
-              BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: ""),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.circle_outlined),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outlined),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings_outlined),
+                label: "",
+              ),
             ],
             currentIndex: _selectedIndex,
             selectedItemColor: kLightBlue,

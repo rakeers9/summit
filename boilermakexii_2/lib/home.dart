@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +25,11 @@ final List<Widget> imageSliders = imgList.map((item) {
   );
 }).toList();
 
+List<Widget> infocards = [
+  InfoCard(imageUrl: 'https://picsum.photos/200/300', line1: "Lane McCormick", line2: "10", line3: "101"),
+  InfoCard(imageUrl: 'https://picsum.photos/200/400', line1: "Bob Dale", line2: "12", line3: "45"),
+];
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -38,65 +45,110 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Trophies", style: TextStyle(fontSize: trophiesFontsize),),
-                  Text("23", style: TextStyle(fontSize: trophiesFontsize),),
-                ],
-              ),
+      body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/background.jpg"), // Change to your image path
+              fit: BoxFit.fitHeight,
+              alignment: Alignment(0,0.2),
             ),
-            CarouselSlider(
-              options: CarouselOptions(
-                aspectRatio: 3/3,
-                enlargeCenterPage: true,
-                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                autoPlayAnimationDuration: Duration(seconds: 1),
-                autoPlayCurve: Curves.easeInOutCirc,
-                enlargeFactor: 0.2,
-                autoPlay: true,
-                viewportFraction: 0.7,
-              ),
-              items: imageSliders,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-                child: SizedBox(
-                  width: size.width,
-                  height: size.height * 0.07,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      backgroundColor: kAccentBlue,
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    ),
-                    onPressed: () {
-
-                    },
-                    child: Text(
-                      "Get Started",
-                      style: GoogleFonts.mandali(
-                        color: Colors.black,
-                        fontSize: size.height * 0.02,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ),
+          ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Trophies", style: TextStyle(fontSize: trophiesFontsize),),
+                    Text("23", style: TextStyle(fontSize: trophiesFontsize),),
+                  ],
                 ),
               ),
-            ),
-            InfoCard(imageUrl: 'https://picsum.photos/200/300', line1: "Lane McCormick", line2: "10", line3: "101"),
-            InfoCard(imageUrl: 'https://picsum.photos/200/400', line1: "Bob Dale", line2: "12", line3: "45"),
-          ],
+              // CarouselSlider(
+              //   options: CarouselOptions(
+              //     aspectRatio: 3/3,
+              //     enlargeCenterPage: true,
+              //     enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+              //     autoPlayAnimationDuration: Duration(seconds: 1),
+              //     autoPlayCurve: Curves.easeInOutCirc,
+              //     enlargeFactor: 0.2,
+              //     autoPlay: true,
+              //     viewportFraction: 0.7,
+              //   ),
+              //   items: imageSliders,
+              // ),
+              SizedBox(
+                width: double.infinity, // Makes it span the full width
+                height: size.height * 0.35, // Adjust this value as needed
+                child: CustomPaint(
+                  painter: MountainPainter(mountainColor: Colors.white, backgroundColor: kBackgroundColor),
+                ),
+              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+              //     child: SizedBox(
+              //       width: size.width,
+              //       height: size.height * 0.07,
+              //       child: ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(12),
+              //           ),
+              //           backgroundColor: darkBlue,
+              //           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              //         ),
+              //         onPressed: () {
+              //
+              //         },
+              //         child: Text(
+              //           "Get Started",
+              //           style: GoogleFonts.mandali(
+              //             color: Colors.black,
+              //             fontSize: size.height * 0.02,
+              //             fontWeight: FontWeight.w300,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+              //     child: GestureDetector(
+              //       onTap: () {
+              //         // Button action
+              //       },
+              //       child: SizedBox(
+              //         width: size.height * 0.15, // Increased size for a larger image
+              //         height: size.height * 0.12,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              SizedBox(
+                height: size.height * 0.18,
+              ),
+              CarouselSlider(
+                options: CarouselOptions(
+                  enlargeCenterPage: true,
+                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                  autoPlayAnimationDuration: Duration(seconds: 1),
+                  autoPlayCurve: Curves.easeInOutCirc,
+                  enlargeFactor: 1,
+                  autoPlay: true,
+                  viewportFraction: 0.5,
+                    scrollDirection: Axis.vertical,
+                ),
+                items: infocards,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -127,7 +179,7 @@ class InfoCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
       child: Card(
-        color: kBackgroundColor,
+        color: cyan1.withOpacity(0.3),
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -154,3 +206,57 @@ class InfoCard extends StatelessWidget {
   }
 }
 
+
+class MountainPainter extends CustomPainter {
+  final Color mountainColor;
+  final Color backgroundColor;
+
+  MountainPainter({required this.mountainColor, required this.backgroundColor});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint circlePaint = Paint()
+      ..color = mountainColor
+      ..style = PaintingStyle.fill;
+    Offset leftCircleCenter = Offset(size.width * 0.4, size.height * 0.9);
+    Offset rightCircleCenter = Offset(size.width * 0.8, size.height * 1.05);
+
+    const double circleRadius = 10.0;
+    canvas.drawCircle(leftCircleCenter, circleRadius, circlePaint);
+    canvas.drawCircle(rightCircleCenter, circleRadius, circlePaint);
+
+    _drawIndicator(canvas, leftCircleCenter, circleRadius, "Friend 1", "45");
+    _drawIndicator(canvas, rightCircleCenter, circleRadius, "Friend 2", "90");
+  }
+
+  void _drawIndicator(Canvas canvas, Offset circleCenter, double radius, String name, String score) {
+    Offset circleTop = Offset(circleCenter.dx, circleCenter.dy - radius);
+    double lineLength = 20.0;
+    Offset lineEnd = Offset(circleTop.dx, circleTop.dy - lineLength);
+
+    final Paint linePaint = Paint()
+      ..color = mountainColor
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawLine(circleTop, lineEnd, linePaint);
+
+    TextSpan textSpan = TextSpan(
+      style: TextStyle(color: mountainColor, fontSize: 12),
+      text: "$name\n$score",
+    );
+
+    TextPainter textPainter = TextPainter(
+      text: textSpan,
+      textAlign: TextAlign.left,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+
+    Offset textOffset = Offset(lineEnd.dx + 5, lineEnd.dy - (textPainter.height / 2));
+    textPainter.paint(canvas, textOffset);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
