@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatelessWidget {
@@ -80,14 +82,14 @@ class UserProfile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
                     child: SizedBox(
                       width: size.width/3,
-                      height: size.height * 0.06,
+                      height: size.height * 0.05,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           backgroundColor: Colors.amberAccent,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         ),
                         onPressed: () {
 
@@ -107,14 +109,14 @@ class UserProfile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
                     child: SizedBox(
                       width: size.width/3,
-                      height: size.height * 0.06,
+                      height: size.height * 0.05,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           backgroundColor: Colors.amberAccent,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         ),
                         onPressed: () {
 
@@ -131,9 +133,69 @@ class UserProfile extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
+              ProfileInfoCard(line1: "Processing...", line2: "0",arrow: 0, date: "3/12/25",),
+              ProfileInfoCard(line1: "Completed", line2: "3 Incorrect", arrow: -1, date: "3/9/25",),
+              ProfileInfoCard(line1: "Completed", line2: "All Incorrect", arrow: 1, date: "3/6/25",)
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileInfoCard extends StatelessWidget {
+  final String line1;
+  final String line2;
+  final int arrow;
+  final String date;
+
+  const ProfileInfoCard({
+    super.key,
+    required this.line1,
+    required this.line2,
+    required this.arrow,
+    required this.date,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double angle = 0;
+    IconData icons = Icons.horizontal_rule_sharp;
+    if (arrow < 0) {
+      icons = Icons.arrow_forward_ios_sharp;
+      angle = pi * 90 / 180;
+    } else if (arrow > 0) {
+      icons = Icons.arrow_forward_ios_sharp;
+      angle = pi * -90 / 180;
+    }
+
+    return Card(
+      color: Colors.black,
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            Transform.rotate(
+              angle: angle,
+              child: Icon(
+                icons,
+                size: 60,
+                color: Colors.grey[700],
+              ),
+            ),
+            SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(date, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                Text(line1, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                Visibility(visible: arrow != 0, child: Text(line2, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300))),
+              ],
+            ),
+          ],
         ),
       ),
     );
