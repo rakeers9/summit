@@ -59,7 +59,7 @@ class UserProfile extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: size.height * 0.03),
                 child: Text(
-                  "\$32.00",
+                  "\$32.35",
                   style: TextStyle(
                     fontSize: size.height * 0.05,
                     fontWeight: FontWeight.w600,
@@ -134,9 +134,19 @@ class UserProfile extends StatelessWidget {
                   ),
                 ],
               ),
-              ProfileInfoCard(line1: "Processing...", line2: "0",arrow: 0, date: "3/12/25",),
-              ProfileInfoCard(line1: "Completed", line2: "3 Incorrect", arrow: -1, date: "3/9/25",),
-              ProfileInfoCard(line1: "Completed", line2: "All Incorrect", arrow: 1, date: "3/6/25",)
+              Flexible(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      ProfileInfoCard(line1: "Processing...", line2: "0", arrow: 0, date: "3/12/25", increased_amt: 0.00),
+                      ProfileInfoCard(line1: "Completed", line2: "3 Incorrect", arrow: -1, date: "3/9/25", increased_amt: 0.00),
+                      ProfileInfoCard(line1: "Completed", line2: "All Correct", arrow: 1, date: "3/6/25", increased_amt: 1.3),
+                      ProfileInfoCard(line1: "Completed", line2: "All Correct", arrow: 1, date: "3/2/25", increased_amt: 1.6),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -150,6 +160,7 @@ class ProfileInfoCard extends StatelessWidget {
   final String line2;
   final int arrow;
   final String date;
+  final double increased_amt;
 
   const ProfileInfoCard({
     super.key,
@@ -157,6 +168,7 @@ class ProfileInfoCard extends StatelessWidget {
     required this.line2,
     required this.arrow,
     required this.date,
+    required this.increased_amt,
   });
 
   @override
@@ -177,23 +189,31 @@ class ProfileInfoCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Transform.rotate(
-              angle: angle,
-              child: Icon(
-                icons,
-                size: 60,
-                color: Colors.grey[700],
-              ),
-            ),
-            SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Text(date, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                Text(line1, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                Visibility(visible: arrow != 0, child: Text(line2, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300))),
+                Transform.rotate(
+                  angle: angle,
+                  child: Icon(
+                    icons,
+                    size: 60,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(date, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    Text(line1, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                    Visibility(visible: arrow != 0, child: Text(line2, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300))),
+                  ],
+                ),
               ],
+            ),
+            Text("+\$${increased_amt.toStringAsFixed(2)}",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
             ),
           ],
         ),
