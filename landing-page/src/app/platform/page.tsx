@@ -28,12 +28,12 @@ const PlatformPage = () => {
                 Tasks
               </button>
               <button 
-                className={`px-3 py-2 rounded-md ${activeTab === 'profile' ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}
+                className={`px-3 py-2 rounded-md ${activeTab === 'upload' ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}
                 onClick={() => setActiveTab('profile')}
               >
                 Profile
               </button>
-              <Link href="/api/auth/logout" className={`px-3 py-2 rounded-md ${activeTab === 'profile' ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}>
+              <Link href="/api/auth/logout" className={`px-3 py-2 rounded-md}`}>
                 LOGOUT
               </Link>
             </nav>
