@@ -54,98 +54,52 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         child: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+              Positioned(
+                top: 0,
+                left: size.width * 0.1,
+                right: size.width * 0.1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Trophies", style: TextStyle(fontSize: trophiesFontsize),),
-                    Text("23", style: TextStyle(fontSize: trophiesFontsize),),
+                    Text("Trophies", style: TextStyle(fontSize: trophiesFontsize)),
+                    Text("23", style: TextStyle(fontSize: trophiesFontsize)),
                   ],
                 ),
               ),
-              // CarouselSlider(
-              //   options: CarouselOptions(
-              //     aspectRatio: 3/3,
-              //     enlargeCenterPage: true,
-              //     enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-              //     autoPlayAnimationDuration: Duration(seconds: 1),
-              //     autoPlayCurve: Curves.easeInOutCirc,
-              //     enlargeFactor: 0.2,
-              //     autoPlay: true,
-              //     viewportFraction: 0.7,
-              //   ),
-              //   items: imageSliders,
-              // ),
-              SizedBox(
-                width: double.infinity, // Makes it span the full width
-                height: size.height * 0.35, // Adjust this value as needed
-                child: CustomPaint(
-                  painter: MountainPainter(mountainColor: Colors.white, backgroundColor: kBackgroundColor),
+              Positioned(
+                top: size.height * 0.04, // Adjusted to maintain spacing
+                left: 0,
+                right: 0,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: size.height * 0.35,
+                  child: CustomPaint(
+                    painter: MountainPainter(
+                      mountainColor: Colors.white,
+                      backgroundColor: kBackgroundColor,
+                    ),
+                  ),
                 ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-              //   child: Padding(
-              //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-              //     child: SizedBox(
-              //       width: size.width,
-              //       height: size.height * 0.07,
-              //       child: ElevatedButton(
-              //         style: ElevatedButton.styleFrom(
-              //           shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(12),
-              //           ),
-              //           backgroundColor: darkBlue,
-              //           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              //         ),
-              //         onPressed: () {
-              //
-              //         },
-              //         child: Text(
-              //           "Get Started",
-              //           style: GoogleFonts.mandali(
-              //             color: Colors.black,
-              //             fontSize: size.height * 0.02,
-              //             fontWeight: FontWeight.w300,
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-              //   child: Padding(
-              //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-              //     child: GestureDetector(
-              //       onTap: () {
-              //         // Button action
-              //       },
-              //       child: SizedBox(
-              //         width: size.height * 0.15, // Increased size for a larger image
-              //         height: size.height * 0.12,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(
-                height: size.height * 0.18,
-              ),
-              CarouselSlider(
-                options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                  autoPlayAnimationDuration: Duration(seconds: 1),
-                  autoPlayCurve: Curves.easeInOutCirc,
-                  enlargeFactor: 1,
-                  autoPlay: true,
-                  viewportFraction: 0.5,
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: -20,
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    enlargeCenterPage: true,
+                    enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                    autoPlayAnimationDuration: Duration(seconds: 1),
+                    autoPlayCurve: Curves.easeInOutCirc,
+                    enlargeFactor: 1,
+                    autoPlay: true,
+                    viewportFraction: 0.5,
                     scrollDirection: Axis.vertical,
+                  ),
+                  items: infocards,
                 ),
-                items: infocards,
               ),
             ],
           ),
@@ -154,7 +108,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
 
 
 class InfoCard extends StatelessWidget {
@@ -218,8 +171,8 @@ class MountainPainter extends CustomPainter {
     final Paint circlePaint = Paint()
       ..color = mountainColor
       ..style = PaintingStyle.fill;
-    Offset leftCircleCenter = Offset(size.width * 0.4, size.height * 0.9);
-    Offset rightCircleCenter = Offset(size.width * 0.8, size.height * 1.05);
+    Offset leftCircleCenter = Offset(size.width * 0.4, size.height * 1.05);
+    Offset rightCircleCenter = Offset(size.width * 0.8, size.height * 1.22);
 
     const double circleRadius = 10.0;
     canvas.drawCircle(leftCircleCenter, circleRadius, circlePaint);

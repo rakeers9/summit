@@ -2,6 +2,7 @@ import 'package:boilermakexii_2/const.dart';
 import 'package:boilermakexii_2/profile.dart';
 import 'package:boilermakexii_2/settings.dart';
 import 'package:boilermakexii_2/start.dart';
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.black,
           primary: Colors.amber,
         ),
-        scaffoldBackgroundColor: Colors.black,
+        // scaffoldBackgroundColor: Colors.black,
         textTheme: GoogleFonts.mandaliTextTheme().copyWith(
           bodyLarge: GoogleFonts.mandali(color: Colors.white),
           bodyMedium: GoogleFonts.mandali(color: Colors.white),
@@ -62,58 +63,80 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              "assets/background.jpg", // Make sure this path is correct
-              fit: BoxFit.fill, // Adjust fit as needed
-            ),
+      extendBody: true,
+      body: _pages[_selectedIndex],
+      // bottomNavigationBar: Theme(
+      //   data: Theme.of(context).copyWith(
+      //     // canvasColor: cyan1.withOpacity(0.8),
+      //     cardColor: Colors.transparent,
+      //     shadowColor: Colors.transparent,
+      //     primaryColor: Colors.transparent,
+      //     scaffoldBackgroundColor: Colors.transparent,
+      //     indicatorColor: Colors.transparent,
+      //     canvasColor: Colors.transparent,
+      //     splashColor: Colors.transparent,
+      //     highlightColor: Colors.transparent,
+      //   ),
+      //   child: BottomNavigationBar(
+      //     items: <BottomNavigationBarItem>[
+      //       BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ""),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.circle_outlined),
+      //         label: "",
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.person_outlined),
+      //         label: "",
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.settings_outlined),
+      //         label: "",
+      //       ),
+      //     ],
+      //     currentIndex: _selectedIndex,
+      //     selectedItemColor: kLightBlue,
+      //     selectedFontSize: 0,
+      //     unselectedFontSize: 0,
+      //     enableFeedback: true,
+      //     showSelectedLabels: false,
+      //     showUnselectedLabels: false,
+      //     unselectedItemColor: kAccentBlue,
+      //     backgroundColor: Colors.transparent,
+      //     iconSize: 30,
+      //     onTap: _onItemTapped,
+      //   ),
+      // ),
+      bottomNavigationBar: DotNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.transparent,
+        dotIndicatorColor: Colors.transparent,
+        enablePaddingAnimation: true,
+        items: [
+          DotNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            selectedColor: Colors.white,
           ),
-          _pages[_selectedIndex],
+          DotNavigationBarItem(
+            icon: Icon(Icons.circle_outlined),
+            selectedColor: Colors.white,
+          ),
+
+          DotNavigationBarItem(
+            icon: Icon(Icons.person_outlined),
+            selectedColor: Colors.white,
+          ),
+
+          DotNavigationBarItem(
+            icon: Icon(Icons.settings_outlined),
+            selectedColor: Colors.white,
+          ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.black,
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: kBackgroundColor,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: "",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.circle_outlined),
-                label: "",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outlined),
-                label: "",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings_outlined),
-                label: "",
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: kLightBlue,
-            selectedFontSize: 0,
-            unselectedFontSize: 0,
-            enableFeedback: true,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            unselectedItemColor: kAccentBlue,
-            backgroundColor: kBackgroundColor,
-            iconSize: 30,
-            onTap: _onItemTapped,
-          ),
-        ),
+        // splashColor: kAccentBlue,
+        marginR: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        paddingR: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       ),
     );
   }

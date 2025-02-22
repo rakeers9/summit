@@ -20,136 +20,151 @@ class UserProfile extends StatelessWidget {
     int score = 56;
 
     return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(profileImageUrl),
-                  backgroundColor: Colors.white,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter, // Start from the top
+            end: Alignment.bottomCenter, // End at the bottom
+            colors: [
+              pink1,  // Light pink at the top
+              pink2,  // Slightly darker pink
+              cyan3,  // Soft cyan transition
+              cyan2,  // Deeper cyan
+              cyan1,  // Darker cyan
+              darkBlue,  // Deep blue at the bottom
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(profileImageUrl),
+                    backgroundColor: Colors.white,
+                  ),
                 ),
-              ),
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: size.height * 0.025,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amber,
-                ),
-              ),
-              Text(
-                "Bronze",
-                style: TextStyle(
-                  fontSize: size.height * 0.02,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                "13th in Region",
-                style: TextStyle(
-                  fontSize: size.height * 0.017,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.03),
-                child: Text(
-                  "\$32.35",
+                Text(
+                  userName,
                   style: TextStyle(
-                    fontSize: size.height * 0.05,
-                    fontWeight: FontWeight.w600,
+                    fontSize: size.height * 0.025,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber,
+                  ),
+                ),
+                Text(
+                  "Bronze",
+                  style: TextStyle(
+                    fontSize: size.height * 0.02,
+                    fontWeight: FontWeight.w300,
                     color: Colors.white,
                   ),
                 ),
-              ),
-              Text(
-                "Current Score $score",
-                style: TextStyle(
-                  fontSize: size.height * 0.02,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                Text(
+                  "13th in Region",
+                  style: TextStyle(
+                    fontSize: size.height * 0.017,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-                    child: SizedBox(
-                      width: size.width/3,
-                      height: size.height * 0.05,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.03),
+                  child: Text(
+                    "\$32.35",
+                    style: TextStyle(
+                      fontSize: size.height * 0.05,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Text(
+                  "Current Score $score",
+                  style: TextStyle(
+                    fontSize: size.height * 0.02,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+                      child: SizedBox(
+                        width: size.width/3,
+                        height: size.height * 0.05,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            backgroundColor: darkBlue,
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           ),
-                          backgroundColor: kAccentBlue,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        ),
-                        onPressed: () {
+                          onPressed: () {
 
-                        },
-                        child: Text(
-                          "Cash Out",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: size.height * 0.02,
-                            fontWeight: FontWeight.w300,
+                          },
+                          child: Text(
+                            "Cash Out",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: size.height * 0.02,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-                    child: SizedBox(
-                      width: size.width/3,
-                      height: size.height * 0.05,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+                      child: SizedBox(
+                        width: size.width/3,
+                        height: size.height * 0.05,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            backgroundColor: darkBlue,
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           ),
-                          backgroundColor: kAccentBlue,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        ),
-                        onPressed: () {
+                          onPressed: () {
 
-                        },
-                        child: Text(
-                          "Edit Profile",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: size.height * 0.02,
-                            fontWeight: FontWeight.w300,
+                          },
+                          child: Text(
+                            "Edit Profile",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: size.height * 0.02,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      ProfileInfoCard(line1: "Processing...", line2: "0", arrow: 0, date: "3/12/25", increased_amt: 0.00),
-                      ProfileInfoCard(line1: "Completed", line2: "3 Incorrect", arrow: -1, date: "3/9/25", increased_amt: 0.00),
-                      ProfileInfoCard(line1: "Completed", line2: "All Correct", arrow: 1, date: "3/6/25", increased_amt: 1.3),
-                      ProfileInfoCard(line1: "Completed", line2: "All Correct", arrow: 1, date: "3/2/25", increased_amt: 1.6),
-                    ],
+                  ],
+                ),
+                Flexible(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        ProfileInfoCard(line1: "Processing...", line2: "0", arrow: 0, date: "3/12/25", increased_amt: 0.00),
+                        ProfileInfoCard(line1: "Completed", line2: "3 Incorrect", arrow: -1, date: "3/9/25", increased_amt: 0.00),
+                        ProfileInfoCard(line1: "Completed", line2: "All Correct", arrow: 1, date: "3/6/25", increased_amt: 1.3),
+                        ProfileInfoCard(line1: "Completed", line2: "All Correct", arrow: 1, date: "3/2/25", increased_amt: 1.6),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -186,7 +201,7 @@ class ProfileInfoCard extends StatelessWidget {
     }
 
     return Card(
-      color: kBackgroundColor,
+      color: cyan3.withOpacity(0.3),
       elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(10.0),

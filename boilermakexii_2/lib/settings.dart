@@ -10,37 +10,68 @@ Map<IconData, String> settingsOptions = {
   Icons.star_rate_outlined: "Rate the App",
 };
 
-List<Widget> cards = settingsOptions.entries.map((entry) {
-  return SettingsCard(title: entry.value, icon: entry.key);
-}).toList();
-
-
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
+      body: Container(
+        height: size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              pink1,
+              pink2,
+              cyan3,
+              cyan2,
+              cyan1,
+              darkBlue,
+            ],
+          ),
+        ),
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(child: Text("Settings", style: TextStyle(fontWeight: FontWeight.bold, fontSize: size.height * 0.04),)),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: size.height * 0.02),
+                  child: Text(
+                    "Settings",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: size.height * 0.04,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.08, vertical: size.height * 0.015),
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.08, vertical: size.height * 0.015),
                 child: Divider(
                   height: 5,
                   color: Colors.white,
                   thickness: 0.5,
                 ),
               ),
-              ...cards,
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: settingsOptions.entries
+                        .map((entry) => Expanded(
+                      child: SettingsCard(title: entry.value, icon: entry.key),
+                    ))
+                        .toList(),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -48,7 +79,6 @@ class SettingsPage extends StatelessWidget {
     );
   }
 }
-
 
 class SettingsCard extends StatelessWidget {
   final IconData icon;
@@ -62,33 +92,44 @@ class SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
-    return Card(
-      color: kBackgroundColor,
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: size.height * 0.005),
+      child: Card(
+        color: darkBlue.withOpacity(0.5),
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
                   Icon(
                     icon,
                     size: size.height * 0.04,
                     color: kAccentBlue,
                   ),
-                SizedBox(width: 12),
-                Text(title, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400)),
-              ],
-            ),
-            Icon(Icons.arrow_forward_ios_rounded, size: size.height * 0.03, color: Colors.white,),
-          ],
+                  SizedBox(width: 12),
+                  Text(
+                    title,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: size.height * 0.03,
+                color: Colors.white,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
