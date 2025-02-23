@@ -12,6 +12,10 @@ const ImageSchema = new mongoose.Schema({
     enum: ['Classification', 'Segmentation'],
     required: true,
   },
+  AI_prediction: {
+    type: mongoose.Schema.Types.Mixed,  // Add this field
+    required: false
+  },
   reviews: [{
     value: mongoose.Schema.Types.Mixed
   }],
