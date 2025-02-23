@@ -5,7 +5,6 @@ import CompanySection from '@/components/sections/company'
 import { Mission } from '@/components/sections/mission'
 import { Footer } from '@/components/layout/footer'
 import Pipeline  from '@/components/sections/pipeline'
-import './globals.css';
 
 export default function Home() {
   return (
