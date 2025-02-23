@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   static final List<Widget> _pages = <Widget>[
     HomePage(),
-    SegmentationPage(),
+    ClassificationPage(),
     UserProfile(
       userName: "Prickle Peanuts",
       profileImageUrl: "https://picsum.photos/200",

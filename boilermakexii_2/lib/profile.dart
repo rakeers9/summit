@@ -17,7 +17,7 @@ class UserProfile extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
-    int score = 56;
+    int score = 45;
 
     return Scaffold(
       body: Container(

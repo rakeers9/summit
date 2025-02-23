@@ -1,4 +1,5 @@
 import 'package:boilermakexii_2/const.dart';
+import 'package:boilermakexii_2/mongo.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:substring_highlight/substring_highlight.dart';
@@ -13,19 +14,27 @@ class ClassificationPage extends StatefulWidget {
 class _ClassificationPageState extends State<ClassificationPage> {
   String prompt = "Describe the following image";
   final PageController _pageController = PageController();
-  final List<String> imageUrls = List.generate(
-    10,
-    (index) => "https://picsum.photos/600/800?random=$index",
-  );
-  final List<TextEditingController> _textControllers = List.generate(
-    10,
-    (_) => TextEditingController(),
-  );
+
+  List<String> newImageUrls = [];
+
   int currentPage = 0;
   final List<String> suggestions = ["Dog", "Cat", "Car", "Tree", "Building"];
 
   @override
   Widget build(BuildContext context) {
+    for (String url in classification) {
+      final RegExp regExp = RegExp(r'/d/([^/]+)/');
+      final match = regExp.firstMatch(url);
+
+      if (match != null && match.groupCount >= 1) {
+        final fileId = match.group(1);
+        final newUrl = "https://drive.google.com/uc?export=view&id=$fileId";
+        newImageUrls.add(newUrl);
+      } else {
+        newImageUrls.add(url);
+      }
+    }
+
     TextEditingController controller = TextEditingController();
 
     Size size = MediaQuery.of(context).size;
@@ -61,7 +70,7 @@ class _ClassificationPageState extends State<ClassificationPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: PageView.builder(
                         controller: _pageController,
-                        itemCount: imageUrls.length,
+                        itemCount: newImageUrls.length,
                         physics: PageScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
@@ -84,7 +93,7 @@ class _ClassificationPageState extends State<ClassificationPage> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
                                     child: CachedNetworkImage(
-                                      imageUrl: imageUrls[index],
+                                      imageUrl: newImageUrls[index],
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       placeholder:
@@ -192,12 +201,14 @@ class _ClassificationPageState extends State<ClassificationPage> {
                                               context,
                                             ).unfocus(); // Dismiss the keyboard
                                             onEditingComplete(); // Call the provided callback
-                                            _pageController.nextPage(
-                                              duration: Duration(
-                                                milliseconds: 800,
-                                              ),
-                                              curve: Curves.easeInCubic,
-                                            );
+                                            if (controller.text != '') {
+                                              _pageController.nextPage(
+                                                duration: Duration(
+                                                  milliseconds: 800,
+                                                ),
+                                                curve: Curves.easeInOutCubic,
+                                              );
+                                            }
                                           },
                                           decoration: InputDecoration(
                                             hintText: 'Enter Classification',

@@ -12,23 +12,38 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
   'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
   'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80',
 ];
 
-
-final List<Widget> imageSliders = imgList.map((item) {
-  return Container(
-    margin: const EdgeInsets.all(5.0),
-    child: ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(30)),
-      child: Image.network(item, fit: BoxFit.cover, width: 300, height: 300,),
-    ),
-  );
-}).toList();
+final List<Widget> imageSliders =
+    imgList.map((item) {
+      return Container(
+        margin: const EdgeInsets.all(5.0),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(30)),
+          child: Image.network(
+            item,
+            fit: BoxFit.cover,
+            width: 300,
+            height: 300,
+          ),
+        ),
+      );
+    }).toList();
 
 List<Widget> infocards = [
-  InfoCard(imageUrl: 'https://picsum.photos/200/300', line1: "Lane McCormick", line2: "10", line3: "101"),
-  InfoCard(imageUrl: 'https://picsum.photos/200/400', line1: "Bob Dale", line2: "12", line3: "45"),
+  InfoCard(
+    imageUrl: 'https://picsum.photos/200/300',
+    line1: "Lane McCormick",
+    line2: "10",
+    line3: "101",
+  ),
+  InfoCard(
+    imageUrl: 'https://picsum.photos/200/400',
+    line1: "Bob Dale",
+    line2: "12",
+    line3: "45",
+  ),
 ];
 
 class HomePage extends StatefulWidget {
@@ -47,13 +62,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/background.jpg"), // Change to your image path
-              fit: BoxFit.fitHeight,
-              alignment: Alignment(0,0.2),
-            ),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/background.jpg",
+            ), // Change to your image path
+            fit: BoxFit.fitHeight,
+            alignment: Alignment(0, 0.2),
           ),
+        ),
         child: SafeArea(
           child: Stack(
             children: [
@@ -61,15 +78,51 @@ class _HomePageState extends State<HomePage> {
                 top: 0,
                 left: size.width * 0.1,
                 right: size.width * 0.1,
-                child: Column(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Column(
+                      children: [
+                        SvgPicture.asset('assets/money-svgrepo-com.svg',
+                          color: Colors.white,
+                          width: 50,
+                          height: 50,
+                        ),
+                        Text(
+                          textAlign: TextAlign.center,
+                          "\$32.35",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                     SvgPicture.asset(
-                      'assets/logo.svg',
+                      'assets/AI_Generated_Logo_2025-02-23_6c928111-f8d5-491b-990e-fc4ecd9387de (2).svg',
                       width: 200,
                       height: 200,
-                    )
+                    ),
+                    Column(
+                      children: [
+                        SvgPicture.asset('assets/trophy-svgrepo-com-2.svg',
+                          color: Colors.white,
+                          width: 50,
+                          height: 50,
+                        ),
+                        Text(
+                          textAlign: TextAlign.center,
+                          "45",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+
                   ],
-                )
+                ),
               ),
               Positioned(
                 top: size.height * 0.04, // Adjusted to maintain spacing
@@ -113,7 +166,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
 class InfoCard extends StatelessWidget {
   final String imageUrl;
   final String line1;
@@ -130,7 +182,6 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return Padding(
@@ -142,17 +193,27 @@ class InfoCard extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Row(
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(imageUrl),
-                radius: 30,
-              ),
+              CircleAvatar(backgroundImage: NetworkImage(imageUrl), radius: 30),
               SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(line1, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text("Recent Cash Out: \$$line2", style: TextStyle(color: Colors.white, fontSize: 14)),
-                  Text("Current Trophies: $line3", style: TextStyle(color: Colors.white, fontSize: 14)),
+                  Text(
+                    line1,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "Recent Cash Out: \$$line2",
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                  Text(
+                    "Current Trophies: $line3",
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  ),
                 ],
               ),
             ],
@@ -163,7 +224,6 @@ class InfoCard extends StatelessWidget {
   }
 }
 
-
 class MountainPainter extends CustomPainter {
   final Color mountainColor;
   final Color backgroundColor;
@@ -172,9 +232,10 @@ class MountainPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint circlePaint = Paint()
-      ..color = mountainColor
-      ..style = PaintingStyle.fill;
+    final Paint circlePaint =
+        Paint()
+          ..color = mountainColor
+          ..style = PaintingStyle.fill;
     Offset leftCircleCenter = Offset(size.width * 0.4, size.height * 1.05);
     Offset rightCircleCenter = Offset(size.width * 0.8, size.height * 1.22);
 
@@ -186,15 +247,22 @@ class MountainPainter extends CustomPainter {
     _drawIndicator(canvas, rightCircleCenter, circleRadius, "Friend 2", "90");
   }
 
-  void _drawIndicator(Canvas canvas, Offset circleCenter, double radius, String name, String score) {
+  void _drawIndicator(
+    Canvas canvas,
+    Offset circleCenter,
+    double radius,
+    String name,
+    String score,
+  ) {
     Offset circleTop = Offset(circleCenter.dx, circleCenter.dy - radius);
     double lineLength = 20.0;
     Offset lineEnd = Offset(circleTop.dx, circleTop.dy - lineLength);
 
-    final Paint linePaint = Paint()
-      ..color = mountainColor
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke;
+    final Paint linePaint =
+        Paint()
+          ..color = mountainColor
+          ..strokeWidth = 2.0
+          ..style = PaintingStyle.stroke;
 
     canvas.drawLine(circleTop, lineEnd, linePaint);
 
@@ -210,7 +278,10 @@ class MountainPainter extends CustomPainter {
     );
     textPainter.layout();
 
-    Offset textOffset = Offset(lineEnd.dx + 5, lineEnd.dy - (textPainter.height / 2));
+    Offset textOffset = Offset(
+      lineEnd.dx + 5,
+      lineEnd.dy - (textPainter.height / 2),
+    );
     textPainter.paint(canvas, textOffset);
   }
 
