@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'const.dart';
@@ -60,13 +61,15 @@ class _HomePageState extends State<HomePage> {
                 top: 0,
                 left: size.width * 0.1,
                 right: size.width * 0.1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
-                    Text("Trophies", style: TextStyle(fontSize: trophiesFontsize)),
-                    Text("23", style: TextStyle(fontSize: trophiesFontsize)),
+                    SvgPicture.asset(
+                      'assets/logo.svg',
+                      width: 200,
+                      height: 200,
+                    )
                   ],
-                ),
+                )
               ),
               Positioned(
                 top: size.height * 0.04, // Adjusted to maintain spacing

@@ -41,6 +41,9 @@ dependencies:
   cached_network_image: ^3.4.1
   substring_highlight: ^1.0.33
   http: ^1.3.0
+  smooth_page_indicator: ^1.2.0+3
+  flutter_svg: ^2.0.17
+  mongo_dart: ^0.10.4
 
 dev_dependencies:
   flutter_test:

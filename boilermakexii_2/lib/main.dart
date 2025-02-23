@@ -1,5 +1,7 @@
 import 'package:boilermakexii_2/const.dart';
+import 'package:boilermakexii_2/create_account.dart';
 import 'package:boilermakexii_2/login.dart';
+import 'package:boilermakexii_2/mongo.dart';
 import 'package:boilermakexii_2/profile.dart';
 import 'package:boilermakexii_2/segmentation.dart';
 import 'package:boilermakexii_2/settings.dart';
@@ -7,10 +9,13 @@ import 'package:boilermakexii_2/classification.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'home.dart';
 
-void main() {
+Future<void> main() async {
+  // mongo_tests();
+  await fetchGroupedImages();
+  print(segmentation);
+  print(classification);
   runApp(const MyApp());
 }
 
@@ -25,7 +30,6 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.black,
           primary: Colors.amber,
         ),
-        // scaffoldBackgroundColor: Colors.black,
         textTheme: GoogleFonts.mandaliTextTheme().copyWith(
           bodyLarge: GoogleFonts.mandali(color: Colors.white),
           bodyMedium: GoogleFonts.mandali(color: Colors.white),
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      home: CreateAccountPage(),
     );
   }
 }
@@ -55,7 +59,6 @@ class _MainScreenState extends State<MainScreen> {
       profileImageUrl: "https://picsum.photos/200",
     ),
     SettingsPage(),
-    LoginPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -70,47 +73,6 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       extendBody: true,
       body: _pages[_selectedIndex],
-      // bottomNavigationBar: Theme(
-      //   data: Theme.of(context).copyWith(
-      //     // canvasColor: cyan1.withOpacity(0.8),
-      //     cardColor: Colors.transparent,
-      //     shadowColor: Colors.transparent,
-      //     primaryColor: Colors.transparent,
-      //     scaffoldBackgroundColor: Colors.transparent,
-      //     indicatorColor: Colors.transparent,
-      //     canvasColor: Colors.transparent,
-      //     splashColor: Colors.transparent,
-      //     highlightColor: Colors.transparent,
-      //   ),
-      //   child: BottomNavigationBar(
-      //     items: <BottomNavigationBarItem>[
-      //       BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ""),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.circle_outlined),
-      //         label: "",
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.person_outlined),
-      //         label: "",
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.settings_outlined),
-      //         label: "",
-      //       ),
-      //     ],
-      //     currentIndex: _selectedIndex,
-      //     selectedItemColor: kLightBlue,
-      //     selectedFontSize: 0,
-      //     unselectedFontSize: 0,
-      //     enableFeedback: true,
-      //     showSelectedLabels: false,
-      //     showUnselectedLabels: false,
-      //     unselectedItemColor: kAccentBlue,
-      //     backgroundColor: Colors.transparent,
-      //     iconSize: 30,
-      //     onTap: _onItemTapped,
-      //   ),
-      // ),
       bottomNavigationBar: DotNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -137,11 +99,6 @@ class _MainScreenState extends State<MainScreen> {
 
           DotNavigationBarItem(
             icon: Icon(Icons.settings_outlined, size: 30,),
-            selectedColor: Colors.white,
-            unselectedColor: darkBlue,
-          ),
-          DotNavigationBarItem(
-            icon: Icon(Icons.account_box, size: 30,),
             selectedColor: Colors.white,
             unselectedColor: darkBlue,
           ),

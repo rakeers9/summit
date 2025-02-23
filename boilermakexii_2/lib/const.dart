@@ -10,3 +10,8 @@ Color pink1 = Color(0xFFDF8E9D);
 Color cyan3 = Color(0xFF25C6CE);
 Color pink2 = Color(0xFFE08D9D);
 Color darkBlue = Color(0xFF047D9A);
+
+
+
+
+bool logged_in = false;
