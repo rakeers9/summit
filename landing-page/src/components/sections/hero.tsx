@@ -22,7 +22,7 @@ export function Hero() {
           Get Started
         </button>
 
-        <p className="text-white/90 text-lg uppercase tracking-[0.2em]">
+        <p className="text-white/90 text-lg uppercase tracking-[0.2em] animate-bounce">
           Scroll Down
         </p>
         <ChevronDown className="w-8 h-8 text-white/90 mx-auto animate-bounce" strokeWidth={2} />
