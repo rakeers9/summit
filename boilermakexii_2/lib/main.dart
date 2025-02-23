@@ -1,4 +1,5 @@
 import 'package:boilermakexii_2/const.dart';
+import 'package:boilermakexii_2/login.dart';
 import 'package:boilermakexii_2/profile.dart';
 import 'package:boilermakexii_2/segmentation.dart';
 import 'package:boilermakexii_2/settings.dart';
@@ -54,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       profileImageUrl: "https://picsum.photos/200",
     ),
     SettingsPage(),
+    LoginPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -135,6 +137,11 @@ class _MainScreenState extends State<MainScreen> {
 
           DotNavigationBarItem(
             icon: Icon(Icons.settings_outlined, size: 30,),
+            selectedColor: Colors.white,
+            unselectedColor: darkBlue,
+          ),
+          DotNavigationBarItem(
+            icon: Icon(Icons.account_box, size: 30,),
             selectedColor: Colors.white,
             unselectedColor: darkBlue,
           ),
