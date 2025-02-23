@@ -1,10 +1,9 @@
-// src/components/layout/footer.tsx
 import Link from 'next/link'
 
 const footerLinks = {
   Platform: [
     { name: 'Features', href: '#features' },
-    { name: 'How it Works', href: '#how-it-works' },
+    { name: 'For Companies', href: '#company' },
     { name: 'Pricing', href: '#pricing' },
     { name: 'FAQ', href: '#faq' }
   ],
@@ -28,7 +27,7 @@ export function Footer() {
         <div>
           <h3 className="text-xl font-bold mb-4">DataLabel</h3>
           <p className="text-[var(--text-white)]">
-            Transforming data labeling through ethical practices and community engagement.
+            Build ethical AI labeling pipelines in minutes with our no‑code platform.
           </p>
         </div>
 

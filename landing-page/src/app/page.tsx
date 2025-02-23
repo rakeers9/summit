@@ -1,8 +1,10 @@
 import { Navbar } from '@/components/layout/navbar'
 import { Hero } from '@/components/sections/hero'
 import { Features } from '@/components/sections/features'
+import CompanySection from '@/components/sections/company'
 import { Mission } from '@/components/sections/mission'
 import { Footer } from '@/components/layout/footer'
+import Pipeline  from '@/components/sections/pipeline'
 import './globals.css';
 
 export default function Home() {
@@ -15,6 +17,8 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <Pipeline />
+        <CompanySection />
         <Features />
         <Mission />
         <Footer />
