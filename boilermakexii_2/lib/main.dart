@@ -2,6 +2,7 @@ import 'package:boilermakexii_2/const.dart';
 import 'package:boilermakexii_2/create_account.dart';
 import 'package:boilermakexii_2/login.dart';
 import 'package:boilermakexii_2/mongo.dart';
+import 'package:boilermakexii_2/play.dart';
 import 'package:boilermakexii_2/profile.dart';
 import 'package:boilermakexii_2/segmentation.dart';
 import 'package:boilermakexii_2/settings.dart';
@@ -53,7 +54,8 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   static final List<Widget> _pages = <Widget>[
     HomePage(),
-    ClassificationPage(),
+    FrostedCardsFullScreenPage(),
+    // SegmentationPage(),
     UserProfile(
       userName: "Prickle Peanuts",
       profileImageUrl: "https://picsum.photos/200",
