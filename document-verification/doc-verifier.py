@@ -51,4 +51,3 @@ def check_creds(extracted_text: str, subject: str) -> str:
 #     import uvicorn
 #     uvicorn.run(app, host="127.0.0.1", port=8000)
     
-    
