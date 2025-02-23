@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import React, { useState } from 'react';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Award, Database, Image } from 'lucide-react';
 import Link from 'next/link';
-import axios from 'axios';
 
 const PlatformPage = () => {
   const [activeTab, setActiveTab] = useState('tasks');
@@ -13,22 +12,8 @@ const PlatformPage = () => {
   const [reviewsPerImage, setReviewsPerImage] = useState('');
   const [targetedDemographic, setTargetedDemographic] = useState('None');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadedFolders, setUploadedFolders] = useState<string[]>([]); // State for uploaded folders
-  const [classificationType, setClassificationType] = useState('Classification'); // State for classification type
-
-  useEffect(() => {
-    // Fetch existing folders when the component mounts
-    const fetchFolders = async () => {
-      try {
-        const response = await axios.get('/api/folders');
-        setUploadedFolders(response.data); // Set the uploaded folders
-      } catch (error) {
-        console.error('Error fetching folders:', error);
-      }
-    };
-
-    fetchFolders();
-  }, []);
+  const [uploadedFolders, setUploadedFolders] = useState<string[]>([]);
+  const [classificationType, setClassificationType] = useState('Classification');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -38,171 +23,194 @@ const PlatformPage = () => {
 
   const handleUpload = async () => {
     if (selectedFile) {
-      // Handle the upload logic here
-      console.log('Uploading file:', selectedFile.name); // Log the file name
-      console.log('Classification Type:', classificationType); // Log the classification type
-
-      // nihal save it locally here
-      
-      // After successful upload, add folder name to the state
-      setUploadedFolders((prev) => [...prev, selectedFile.name]); // Add folder name to the state
-      setIsModalOpen(false); // Closing the modal
-      setSelectedFile(null); // Reset selected file
-      setClassificationType('Segmentation'); // Reset type
+      try {
+        // Create FormData object
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('reviewsPerImage', reviewsPerImage);
+        formData.append('targetedDemographic', targetedDemographic);
+        formData.append('classificationType', classificationType);
+  
+        // Send the file and metadata
+        const response = await fetch('/api/uploads', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+  
+        const data = await response.json();
+        
+        // Update local state
+        setUploadedFolders((prev) => [...prev, selectedFile.name]);
+        setIsModalOpen(false);
+        setSelectedFile(null);
+        setReviewsPerImage('');
+        setTargetedDemographic('None');
+        setClassificationType('Classification');
+  
+        // Show success message
+        alert('Upload successful!');
+  
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert('Failed to upload file. Please try again.');
+      }
     }
   };
 
-  const handleUploadClick = () => {
-    setActiveTab('upload');
-    setIsModalOpen(true);
-  };
-
-  const handleFolderClick = (folderName: string) => {
-    // Logic to navigate to the analytics page for the folder
-    console.log('Folder clicked:', folderName);
-    // Add your navigation logic here, e.g., using router.push('/analytics/[folderName]');
-  };
+  // Rest of the handlers remain the same
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="min-h-screen mountain-bg">
+      {/* Minimal Header */}
+      <header className="bg-white/10 backdrop-blur-sm border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-gray-900">Data Labeling Platform</h1>
-              <Badge variant="secondary" className="text-sm">Beta</Badge>
+              <h1 className="text-2xl font-medium text-white">DataLabel Platform</h1>
+              <Badge variant="secondary" className="bg-white/20 text-white">Beta</Badge>
             </div>
-            <nav className="flex space-x-4">
+            <nav className="flex items-center space-x-6">
               <button 
-                className={`px-3 py-2 rounded-md ${activeTab === 'tasks' ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}
+                className={`px-4 py-2 rounded-full transition-all ${
+                  activeTab === 'tasks' 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white/70 hover:text-white'
+                }`}
                 onClick={() => setActiveTab('tasks')}
               >
                 Tasks
               </button>
               <button 
-                className={`px-3 py-2 rounded-md ${activeTab === 'upload' ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}
-                onClick={handleUploadClick}
+                className={`px-4 py-2 rounded-full transition-all ${
+                  activeTab === 'upload' 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white/70 hover:text-white'
+                }`}
+                onClick={() => setIsModalOpen(true)}
               >
                 Upload
               </button>
-              <Link href="/api/auth/logout" className="px-3 py-2 rounded-md">
-                LOGOUT
+              <Link 
+                href="/api/auth/logout" 
+                className="px-4 py-2 rounded-full text-white/70 hover:text-white transition-all"
+              >
+                Logout
               </Link>
             </nav>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center space-x-2">
-                <Award className="w-5 h-5 text-blue-500" />
-                <span>Accuracy Score</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">98.5%</p>
-              <p className="text-sm text-gray-500">Last 30 days</p>
-            </CardContent>
-          </Card>
+          {/* Stat Cards */}
+          {[
+            { icon: Award, title: 'Accuracy Score', value: '98.5%', subtitle: 'Last 30 days' },
+            { icon: Database, title: 'Tasks Completed', value: '1,234', subtitle: 'Total contributions' },
+            { icon: Image, title: 'Available Tasks', value: '89', subtitle: 'Ready to label' }
+          ].map((stat, index) => (
+            <div key={index} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+              <div className="flex items-center space-x-3 mb-4">
+                <stat.icon className="w-5 h-5 text-white/70" />
+                <h3 className="text-lg font-medium text-white">{stat.title}</h3>
+              </div>
+              <p className="text-3xl font-bold text-white mb-1">{stat.value}</p>
+              <p className="text-sm text-white/70">{stat.subtitle}</p>
+            </div>
+          ))}
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center space-x-2">
-                <Database className="w-5 h-5 text-green-500" />
-                <span>Tasks Completed</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">1,234</p>
-              <p className="text-sm text-gray-500">Total contributions</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center space-x-2">
-                <Image className="w-5 h-5 text-purple-500" />
-                <span>Available Tasks</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">89</p>
-              <p className="text-sm text-gray-500">Ready to label</p>
-            </CardContent>
-          </Card>
-
-          {/* Folders Uploaded Section */}
+          {/* Folders Section */}
           <div className="md:col-span-3">
-            <Card>
-              <CardHeader>
-                <CardTitle>Folders Uploaded</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {uploadedFolders.map((folder, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer" onClick={() => handleFolderClick(folder)}>
-                      <div>
-                        <h3 className="font-medium">{folder}</h3>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+              <h2 className="text-xl font-medium text-white mb-6">Folders Uploaded</h2>
+              <div className="space-y-4">
+                {uploadedFolders.map((folder, index) => (
+                  <div 
+                    key={index} 
+                    className="bg-white/5 hover:bg-white/10 rounded-xl p-4 cursor-pointer transition-all border border-white/10"
+                  >
+                    <h3 className="text-white font-medium">{folder}</h3>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </main>
 
-      {/* Modal for Upload */}
+      {/* Upload Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-bold mb-4">Upload Files</h2>
-            <input
-              type="file"
-              accept=".zip"
-              onChange={handleFileChange}
-              className="mb-4"
-            />
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Reviews per Image:</label>
-              <input
-                type="number"
-                value={reviewsPerImage}
-                onChange={(e) => setReviewsPerImage(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Targeted Demographic:</label>
-              <select
-                value={targetedDemographic}
-                onChange={(e) => setTargetedDemographic(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              >
-                <option value="None">None</option>
-                <option value="Adults">Adults</option>
-                <option value="Teens">Teens</option>
-                <option value="Kids">Kids</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Classification Type:</label>
-              <select
-                value={classificationType}
-                onChange={(e) => setClassificationType(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              >
-                <option value="Classification">Classification</option>
-                <option value="Segmentation">Segmentation</option>
-              </select>
-            </div>
-            <div className="flex justify-end">
-              <button onClick={() => setIsModalOpen(false)} className="mr-2 px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
-              <button onClick={handleUpload} className="px-4 py-2 bg-blue-500 text-black rounded-md">Upload</button>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/20 w-[480px] text-white">
+            <h2 className="text-xl font-medium mb-6">Upload Files</h2>
+            
+            <div className="space-y-6">
+              <div>
+                <input
+                  type="file"
+                  accept=".zip"
+                  onChange={handleFileChange}
+                  className="block w-full text-sm text-white/70
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-medium
+                    file:bg-white/10 file:text-white
+                    hover:file:bg-white/20"
+                />
+              </div>
+
+              {['Reviews per Image', 'Targeted Demographic', 'Classification Type'].map((field, index) => (
+                <div key={index}>
+                  <label className="block text-sm font-medium mb-2">{field}</label>
+                  {field === 'Reviews per Image' ? (
+                    <input
+                      type="number"
+                      value={reviewsPerImage}
+                      onChange={(e) => setReviewsPerImage(e.target.value)}
+                      className="w-full bg-white/10 rounded-lg px-4 py-2 text-white placeholder-white/50 border border-white/20"
+                    />
+                  ) : (
+                    <select
+                      value={field === 'Targeted Demographic' ? targetedDemographic : classificationType}
+                      onChange={(e) => field === 'Targeted Demographic' 
+                        ? setTargetedDemographic(e.target.value)
+                        : setClassificationType(e.target.value)
+                      }
+                      className="w-full bg-white/10 rounded-lg px-4 py-2 text-white border border-white/20"
+                    >
+                      {field === 'Targeted Demographic' ? (
+                        ['None', 'Adults', 'Teens', 'Kids'].map(option => (
+                          <option key={option} value={option}>{option}</option>
+                        ))
+                      ) : (
+                        ['Classification', 'Segmentation'].map(option => (
+                          <option key={option} value={option}>{option}</option>
+                        ))
+                      )}
+                    </select>
+                  )}
+                </div>
+              ))}
+
+              <div className="flex justify-end space-x-4 mt-8">
+                <button 
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleUpload}
+                  className="px-6 py-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
+                >
+                  Upload
+                </button>
+              </div>
             </div>
           </div>
         </div>

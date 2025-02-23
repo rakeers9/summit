@@ -2,23 +2,23 @@ import Link from 'next/link'
 
 export function Navbar() {
   return (
-    <nav className="flex items-center justify-between p-6">
-      <div className="text-2xl font-bold text-blue-600">DataLabel</div>
-      <div className="flex gap-6">
-        <Link href="#about" className="text-gray-600 hover:text-blue-600">
-          About
+    <nav className="fixed w-full top-0 z-50 px-6 py-4">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <Link href="/" className="text-white/90 text-xl font-medium">
+          DataLabel
         </Link>
-        <Link href="#features" className="text-gray-600 hover:text-blue-600">
-          Features
-        </Link>
-        <Link href="#mission" className="text-gray-600 hover:text-blue-600">
-          Our Mission
-        </Link>
-        <Link href="/api/auth/login" className="text-gray-600 hover:text-blue-600">
-          LOGIN
-        </Link>
-        <a href="/api/auth/login">Login</a>
+        <div className="flex items-center gap-8">
+          <Link href="#features" className="text-white/75 hover:text-white text-sm transition-colors">
+            Features
+          </Link>
+          <Link href="#mission" className="text-white/75 hover:text-white text-sm transition-colors">
+            Mission
+          </Link>
+          <Link href="/api/auth/login" className="px-4 py-1.5 bg-white/10 rounded-full text-sm text-white hover:bg-white/20 transition-all">
+            Login
+          </Link>
+        </div>
       </div>
     </nav>
-  )
+  );
 }

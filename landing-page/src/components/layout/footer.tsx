@@ -23,26 +23,24 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-white px-6 py-12">
+    <footer className="bg-[var(--footer-background)] text-[var(--text-white)] px-6 py-12">
       <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
-        {/* Company Description */}
         <div>
           <h3 className="text-xl font-bold mb-4">DataLabel</h3>
-          <p className="text-gray-400">
+          <p className="text-[var(--text-white)]">
             Transforming data labeling through ethical practices and community engagement.
           </p>
         </div>
 
-        {/* Navigation Sections */}
         {Object.entries(footerLinks).map(([title, links]) => (
           <div key={title}>
-            <h4 className="font-bold mb-4">{title}</h4>
+            <h4 className="font-bold mb-4 text-[var(--text-white)]">{title}</h4>
             <ul className="space-y-2">
               {links.map((link) => (
                 <li key={link.name}>
                   <Link 
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-[var(--text-white)] hover:text-[var(--accent)] transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -53,23 +51,22 @@ export function Footer() {
         ))}
       </div>
 
-      {/* Bottom Bar */}
-      <div className="max-w-6xl mx-auto mt-8 pt-8 border-t border-gray-800">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400 text-sm">
+      <div className="max-w-6xl mx-auto mt-8 pt-8 border-t border-[var(--accent)]">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-[var(--text-white)] text-sm">
           <p>© {new Date().getFullYear()} DataLabel. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="#" className="hover:text-white">
+            <Link href="#" className="hover:text-[var(--accent)] transition-colors">
               Twitter
             </Link>
-            <Link href="#" className="hover:text-white">
+            <Link href="#" className="hover:text-[var(--accent)] transition-colors">
               LinkedIn
             </Link>
-            <Link href="#" className="hover:text-white">
+            <Link href="#" className="hover:text-[var(--accent)] transition-colors">
               GitHub
             </Link>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
