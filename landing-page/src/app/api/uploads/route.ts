@@ -1,13 +1,17 @@
+// src/app/api/uploads/route.ts
 import { NextResponse } from 'next/server';
 import JSZip from 'jszip';
 import { uploadToDrive, createFolder, type UploadFile } from '@/lib/googleDrive';
+import dbConnect from '@/lib/dbConnect';
+import Image from '@/models/Image';
 
 export async function POST(request: Request) {
   try {
+    // Connect to MongoDB
+    await dbConnect();
+
     const data = await request.formData();
     const file = data.get('file') as File;
-    const reviewsPerImage = data.get('reviewsPerImage') as string;
-    const targetedDemographic = data.get('targetedDemographic') as string;
     const classificationType = data.get('classificationType') as string;
 
     if (!file) {
@@ -32,6 +36,7 @@ export async function POST(request: Request) {
       driveId: string;
       link: string;
       uploadDate: Date;
+      mongoId: string;
     }> = [];
 
     // Process each file in the zip
@@ -63,11 +68,20 @@ export async function POST(request: Request) {
       
       console.log('Uploaded image:', filename, 'with ID:', uploadedFile.id);
 
+      // Create MongoDB document for the image
+      const imageDoc = await Image.create({
+        driveLink: uploadedFile.webViewLink,
+        type: classificationType,
+        reviews: [],
+        totalReviews: 0
+      });
+
       images.push({
         filename,
         driveId: uploadedFile.id,
         link: uploadedFile.webViewLink,
-        uploadDate: new Date()
+        uploadDate: new Date(),
+        mongoId: imageDoc._id.toString()
       });
     }
 
@@ -77,8 +91,6 @@ export async function POST(request: Request) {
         folderId,
         folderName,
         images,
-        reviewsPerImage: parseInt(reviewsPerImage),
-        targetedDemographic,
         classificationType
       }
     });
