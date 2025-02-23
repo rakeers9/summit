@@ -5,7 +5,6 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 import tempfile
 from fastapi.responses import FileResponse
 
-# NEEDS TO BE A TORCHSCRIPT MODEL
 
 MODEL_DIR = "uploaded_models"
 os.makedirs(MODEL_DIR, exist_ok=True)
