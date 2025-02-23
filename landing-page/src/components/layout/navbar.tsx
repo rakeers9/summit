@@ -11,10 +11,16 @@ export function Navbar() {
           <Link href="#features" className="text-white/75 hover:text-white text-sm transition-colors">
             Features
           </Link>
+          <Link href="#company" className="text-white/75 hover:text-white text-sm transition-colors">
+            For Companies
+          </Link>
           <Link href="#mission" className="text-white/75 hover:text-white text-sm transition-colors">
             Mission
           </Link>
-          <Link href="/api/auth/login" className="px-4 py-1.5 bg-white/10 rounded-full text-sm text-white hover:bg-white/20 transition-all">
+          <Link 
+            href="/api/auth/login" 
+            className="px-4 py-1.5 bg-white/10 rounded-full text-sm text-white hover:bg-white/20 transition-all"
+          >
             Login
           </Link>
         </div>
