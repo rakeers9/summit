@@ -3,8 +3,24 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Award, Database, Image } from 'lucide-react';
+import { Award, Database, Image, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+
+interface ImageLink {
+  filename: string;
+  driveId: string;
+  link: string;
+  uploadDate: Date;
+}
+
+interface UploadedFolder {
+  folderName: string;
+  uploadDate: Date;
+  images: ImageLink[];
+  reviewsPerImage: number;
+  targetedDemographic: string;
+  classificationType: string;
+}
 
 const PlatformPage = () => {
   const [activeTab, setActiveTab] = useState('tasks');
@@ -12,8 +28,10 @@ const PlatformPage = () => {
   const [reviewsPerImage, setReviewsPerImage] = useState('');
   const [targetedDemographic, setTargetedDemographic] = useState('None');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadedFolders, setUploadedFolders] = useState<string[]>([]);
+  const [uploadedFolders, setUploadedFolders] = useState<UploadedFolder[]>([]);
   const [classificationType, setClassificationType] = useState('Classification');
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState<UploadedFolder | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -24,14 +42,14 @@ const PlatformPage = () => {
   const handleUpload = async () => {
     if (selectedFile) {
       try {
-        // Create FormData object
+        setIsUploading(true);
+        
         const formData = new FormData();
         formData.append('file', selectedFile);
         formData.append('reviewsPerImage', reviewsPerImage);
         formData.append('targetedDemographic', targetedDemographic);
         formData.append('classificationType', classificationType);
   
-        // Send the file and metadata
         const response = await fetch('/api/uploads', {
           method: 'POST',
           body: formData,
@@ -43,29 +61,35 @@ const PlatformPage = () => {
   
         const data = await response.json();
         
-        // Update local state
-        setUploadedFolders((prev) => [...prev, selectedFile.name]);
+        const newFolder: UploadedFolder = {
+          folderName: selectedFile.name,
+          uploadDate: new Date(),
+          images: data.data.images,
+          reviewsPerImage: parseInt(reviewsPerImage),
+          targetedDemographic,
+          classificationType,
+        };
+        
+        setUploadedFolders((prev) => [...prev, newFolder]);
         setIsModalOpen(false);
         setSelectedFile(null);
         setReviewsPerImage('');
         setTargetedDemographic('None');
         setClassificationType('Classification');
   
-        // Show success message
         alert('Upload successful!');
   
       } catch (error) {
         console.error('Upload error:', error);
         alert('Failed to upload file. Please try again.');
+      } finally {
+        setIsUploading(false);
       }
     }
   };
 
-  // Rest of the handlers remain the same
-
   return (
     <div className="min-h-screen mountain-bg">
-      {/* Minimal Header */}
       <header className="bg-white/10 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
@@ -105,10 +129,8 @@ const PlatformPage = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Stat Cards */}
           {[
             { icon: Award, title: 'Accuracy Score', value: '98.5%', subtitle: 'Last 30 days' },
             { icon: Database, title: 'Tasks Completed', value: '1,234', subtitle: 'Total contributions' },
@@ -124,7 +146,6 @@ const PlatformPage = () => {
             </div>
           ))}
 
-          {/* Folders Section */}
           <div className="md:col-span-3">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
               <h2 className="text-xl font-medium text-white mb-6">Folders Uploaded</h2>
@@ -132,18 +153,61 @@ const PlatformPage = () => {
                 {uploadedFolders.map((folder, index) => (
                   <div 
                     key={index} 
-                    className="bg-white/5 hover:bg-white/10 rounded-xl p-4 cursor-pointer transition-all border border-white/10"
+                    className={`bg-white/5 hover:bg-white/10 rounded-xl p-4 cursor-pointer transition-all border border-white/10 ${
+                      selectedFolder?.folderName === folder.folderName ? 'border-white/40' : ''
+                    }`}
+                    onClick={() => setSelectedFolder(folder)}
                   >
-                    <h3 className="text-white font-medium">{folder}</h3>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-white font-medium">{folder.folderName}</h3>
+                        <p className="text-white/70 text-sm">
+                          {folder.images.length} images • Uploaded {new Date(folder.uploadDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="bg-white/20">
+                        {folder.classificationType}
+                      </Badge>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
+
+          {selectedFolder && (
+            <div className="md:col-span-3">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-medium text-white">
+                    {selectedFolder.folderName} - Images
+                  </h2>
+                  <Badge variant="secondary" className="bg-white/20">
+                    {selectedFolder.targetedDemographic} • {selectedFolder.reviewsPerImage} reviews/image
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {selectedFolder.images.map((image, index) => (
+                    <a
+                      key={index}
+                      href={image.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block bg-white/5 rounded-lg p-3 hover:bg-white/10 transition-all"
+                    >
+                      <div className="text-white text-sm truncate">{image.filename}</div>
+                      <div className="text-white/50 text-xs mt-1">
+                        {new Date(image.uploadDate).toLocaleDateString()}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
-      {/* Upload Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/20 w-[480px] text-white">
@@ -155,6 +219,7 @@ const PlatformPage = () => {
                   type="file"
                   accept=".zip"
                   onChange={handleFileChange}
+                  disabled={isUploading}
                   className="block w-full text-sm text-white/70
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0
@@ -172,6 +237,7 @@ const PlatformPage = () => {
                       type="number"
                       value={reviewsPerImage}
                       onChange={(e) => setReviewsPerImage(e.target.value)}
+                      disabled={isUploading}
                       className="w-full bg-white/10 rounded-lg px-4 py-2 text-white placeholder-white/50 border border-white/20"
                     />
                   ) : (
@@ -181,6 +247,7 @@ const PlatformPage = () => {
                         ? setTargetedDemographic(e.target.value)
                         : setClassificationType(e.target.value)
                       }
+                      disabled={isUploading}
                       className="w-full bg-white/10 rounded-lg px-4 py-2 text-white border border-white/20"
                     >
                       {field === 'Targeted Demographic' ? (
@@ -200,15 +267,24 @@ const PlatformPage = () => {
               <div className="flex justify-end space-x-4 mt-8">
                 <button 
                   onClick={() => setIsModalOpen(false)}
-                  className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all"
+                  disabled={isUploading}
+                  className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={handleUpload}
-                  className="px-6 py-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
+                  disabled={isUploading}
+                  className="px-6 py-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all disabled:opacity-50 flex items-center space-x-2"
                 >
-                  Upload
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Uploading...</span>
+                    </>
+                  ) : (
+                    <span>Upload</span>
+                  )}
                 </button>
               </div>
             </div>
