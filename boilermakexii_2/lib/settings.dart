@@ -22,15 +22,11 @@ class SettingsPage extends StatelessWidget {
         height: size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topCenter, // Start from the top
+            end: Alignment.bottomCenter, // End at the bottom
             colors: [
-              pink1,
-              pink2,
-              cyan3,
-              cyan2,
-              cyan1,
-              darkBlue,
+              pink2,  // Slightly darker pink
+              cyan3,  // Soft cyan transition
             ],
           ),
         ),
@@ -54,9 +50,9 @@ class SettingsPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                     horizontal: size.width * 0.08, vertical: size.height * 0.015),
                 child: Divider(
-                  height: 5,
+                  height: 10,
                   color: Colors.white,
-                  thickness: 0.5,
+                  thickness: 1,
                 ),
               ),
               Expanded(
@@ -97,7 +93,8 @@ class SettingsCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: size.height * 0.005),
       child: Card(
-        color: darkBlue.withOpacity(0.5),
+        shadowColor: Colors.grey[300],
+        color: cyan2.withOpacity(0.3),
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -109,7 +106,7 @@ class SettingsCard extends StatelessWidget {
                   Icon(
                     icon,
                     size: size.height * 0.04,
-                    color: kAccentBlue,
+                    color: darkBlue,
                   ),
                   SizedBox(width: 12),
                   Text(

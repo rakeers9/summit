@@ -1,0 +1,231 @@
+import 'package:boilermakexii_2/const.dart';
+import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:substring_highlight/substring_highlight.dart';
+
+class ClassificationPage extends StatefulWidget {
+  const ClassificationPage({super.key});
+
+  @override
+  State<ClassificationPage> createState() => _ClassificationPageState();
+}
+
+class _ClassificationPageState extends State<ClassificationPage> {
+  String prompt = "Describe the following image";
+  final PageController _pageController = PageController();
+  final List<String> imageUrls = List.generate(
+    10,
+    (index) => "https://picsum.photos/600/800?random=$index",
+  );
+  final List<TextEditingController> _textControllers = List.generate(
+    10,
+    (_) => TextEditingController(),
+  );
+  int currentPage = 0;
+  final List<String> suggestions = ["Dog", "Cat", "Car", "Tree", "Building"];
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+
+    Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/background.jpg"),
+            fit: BoxFit.fitHeight,
+            alignment: Alignment(0, 0.2),
+          ),
+        ),
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      prompt,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: size.height * 0.02,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: imageUrls.length,
+                        physics: PageScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              Center(
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 300),
+                                  margin: EdgeInsets.symmetric(
+                                    vertical: currentPage == index ? 5 : 20,
+                                  ),
+                                  height: size.height * 0.75,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
+                                    borderRadius: BorderRadius.circular(22),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: CachedNetworkImage(
+                                      imageUrl: imageUrls[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      placeholder:
+                                          (context, url) => Center(
+                                            child: CircularProgressIndicator(
+                                              color: darkBlue,
+                                            ),
+                                          ),
+                                      errorWidget:
+                                          (context, url, error) => Icon(
+                                            Icons.error,
+                                            color: Colors.red,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 30,
+                                left: 20,
+                                right: 20,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 15,
+                                      vertical: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.cyan.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(22),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          blurRadius: 10,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Autocomplete(
+                                      optionsBuilder: (
+                                        TextEditingValue textEditingValue,
+                                      ) {
+                                        if (textEditingValue.text.isEmpty) {
+                                          return const Iterable<String>.empty();
+                                        } else {
+                                          return suggestions.where(
+                                            (word) =>
+                                                word.toLowerCase().contains(
+                                                  textEditingValue.text
+                                                      .toLowerCase(),
+                                                ),
+                                          );
+                                        }
+                                      },
+                                      optionsViewBuilder: (
+                                        context,
+                                        Function(String) onSelected,
+                                        options,
+                                      ) {
+                                        return Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(22),
+                                              color: Colors.transparent,
+                                            ),
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Wrap(
+                                              spacing: 8.0,
+                                              runSpacing: 4.0,
+                                              children:
+                                                  options.map<Widget>((option) {
+                                                    return ActionChip(
+                                                      label: Text(
+                                                        option.toString(),
+                                                      ),
+                                                      surfaceTintColor:
+                                                          Colors.transparent,
+                                                      onPressed: () {
+                                                        onSelected(
+                                                          option.toString(),
+                                                        );
+                                                      },
+                                                    );
+                                                  }).toList(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      onSelected: (selectedString) {},
+                                      fieldViewBuilder: (
+                                        context,
+                                        controller,
+                                        focusNode,
+                                        onEditingComplete,
+                                      ) {
+                                        return TextField(
+                                          textAlign: TextAlign.left,
+                                          controller: controller,
+                                          focusNode: focusNode,
+                                          onEditingComplete: () {
+                                            FocusScope.of(
+                                              context,
+                                            ).unfocus(); // Dismiss the keyboard
+                                            onEditingComplete(); // Call the provided callback
+                                            _pageController.nextPage(
+                                              duration: Duration(
+                                                milliseconds: 800,
+                                              ),
+                                              curve: Curves.easeInCubic,
+                                            );
+                                          },
+                                          decoration: InputDecoration(
+                                            hintText: 'Enter Classification',
+                                            hintStyle: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                            border:
+                                                InputBorder
+                                                    .none, // Removed the border here
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,7 +1,8 @@
 import 'package:boilermakexii_2/const.dart';
 import 'package:boilermakexii_2/profile.dart';
+import 'package:boilermakexii_2/segmentation.dart';
 import 'package:boilermakexii_2/settings.dart';
-import 'package:boilermakexii_2/start.dart';
+import 'package:boilermakexii_2/classification.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   static final List<Widget> _pages = <Widget>[
     HomePage(),
-    StartPage(),
+    SegmentationPage(),
     UserProfile(
       userName: "Prickle Peanuts",
       profileImageUrl: "https://picsum.photos/200",
@@ -116,22 +117,26 @@ class _MainScreenState extends State<MainScreen> {
         enablePaddingAnimation: true,
         items: [
           DotNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
+            icon: Icon(Icons.home_outlined, size: 30,),
             selectedColor: Colors.white,
+            unselectedColor: darkBlue,
           ),
           DotNavigationBarItem(
-            icon: Icon(Icons.circle_outlined),
+            icon: Icon(Icons.play_arrow_outlined,size: 30,),
             selectedColor: Colors.white,
-          ),
-
-          DotNavigationBarItem(
-            icon: Icon(Icons.person_outlined),
-            selectedColor: Colors.white,
+            unselectedColor: darkBlue,
           ),
 
           DotNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
+            icon: Icon(Icons.person_outlined,size: 30,),
             selectedColor: Colors.white,
+            unselectedColor: darkBlue,
+          ),
+
+          DotNavigationBarItem(
+            icon: Icon(Icons.settings_outlined, size: 30,),
+            selectedColor: Colors.white,
+            unselectedColor: darkBlue,
           ),
         ],
         // splashColor: kAccentBlue,

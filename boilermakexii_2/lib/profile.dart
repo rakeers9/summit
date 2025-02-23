@@ -26,12 +26,11 @@ class UserProfile extends StatelessWidget {
             begin: Alignment.topCenter, // Start from the top
             end: Alignment.bottomCenter, // End at the bottom
             colors: [
-              pink1,  // Light pink at the top
+              // pink1,  // Light pink at the top
               pink2,  // Slightly darker pink
               cyan3,  // Soft cyan transition
-              cyan2,  // Deeper cyan
-              cyan1,  // Darker cyan
-              darkBlue,  // Deep blue at the bottom
+              // cyan2,
+              // cyan1,  // Darker cyan
             ],
           ),
         ),
@@ -53,7 +52,7 @@ class UserProfile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: size.height * 0.025,
                     fontWeight: FontWeight.bold,
-                    color: Colors.amber,
+                    color: darkBlue,
                   ),
                 ),
                 Text(
@@ -84,7 +83,7 @@ class UserProfile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Current Score $score",
+                  "Current Trophies: $score",
                   style: TextStyle(
                     fontSize: size.height * 0.02,
                     fontWeight: FontWeight.w300,
@@ -200,39 +199,42 @@ class ProfileInfoCard extends StatelessWidget {
       angle = pi * -90 / 180;
     }
 
-    return Card(
-      color: cyan3.withOpacity(0.3),
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Transform.rotate(
-                  angle: angle,
-                  child: Icon(
-                    icons,
-                    size: 60,
-                    color: kLightBlue,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Card(
+        color: cyan2.withOpacity(0.3),
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Transform.rotate(
+                    angle: angle,
+                    child: Icon(
+                      icons,
+                      size: 50,
+                      color: darkBlue,
+                    ),
                   ),
-                ),
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(date, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                    Text(line1, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                    Visibility(visible: arrow != 0, child: Text(line2, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300))),
-                  ],
-                ),
-              ],
-            ),
-            Text("+\$${increased_amt.toStringAsFixed(2)}",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-            ),
-          ],
+                  SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(date, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                      Text(line1, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                      Visibility(visible: arrow != 0, child: Text(line2, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300))),
+                    ],
+                  ),
+                ],
+              ),
+              Text("+\$${increased_amt.toStringAsFixed(2)}",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+              ),
+            ],
+          ),
         ),
       ),
     );
