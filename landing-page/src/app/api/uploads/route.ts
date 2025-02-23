@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { processZipUpload, isValidZipFile } from '@/lib/googleDrive';
+import JSZip from 'jszip';
+import { uploadToDrive, createFolder, type UploadFile } from '@/lib/googleDrive';
 
 export async function POST(request: Request) {
   try {
@@ -9,7 +10,6 @@ export async function POST(request: Request) {
     const targetedDemographic = data.get('targetedDemographic') as string;
     const classificationType = data.get('classificationType') as string;
 
-    // Validation checks
     if (!file) {
       return NextResponse.json(
         { error: 'No file provided' },
@@ -17,60 +17,77 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!isValidZipFile(file.name)) {
-      return NextResponse.json(
-        { error: 'Only ZIP files are allowed' },
-        { status: 400 }
-      );
+    // Read the zip file
+    const zipBuffer = await file.arrayBuffer();
+    const zip = await JSZip.loadAsync(zipBuffer);
+    
+    // Create a folder in Google Drive
+    const folderName = file.name.replace('.zip', '');
+    console.log('Creating folder:', folderName);
+    const folderId = await createFolder(folderName);
+    console.log('Created folder with ID:', folderId);
+    
+    const images: Array<{
+      filename: string;
+      driveId: string;
+      link: string;
+      uploadDate: Date;
+    }> = [];
+
+    // Process each file in the zip
+    for (const [filename, zipEntry] of Object.entries(zip.files)) {
+      // Skip directories and hidden files
+      if (zipEntry.dir || filename.startsWith('__MACOSX') || filename.startsWith('.')) {
+        continue;
+      }
+
+      // Check if file is an image
+      const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(filename);
+      if (!isImage) continue;
+
+      console.log('Processing image:', filename);
+
+      // Get the file data as ArrayBuffer
+      const fileData = await zipEntry.async('arraybuffer');
+      const fileExtension = filename.split('.').pop() || '';
+      
+      // Create the upload file object
+      const uploadFile: UploadFile = {
+        name: filename,
+        arrayBuffer: fileData,
+        mimeType: `image/${fileExtension}`
+      };
+      
+      // Upload to Google Drive
+      const uploadedFile = await uploadToDrive(uploadFile, folderId);
+      
+      console.log('Uploaded image:', filename, 'with ID:', uploadedFile.id);
+
+      images.push({
+        filename,
+        driveId: uploadedFile.id,
+        link: uploadedFile.webViewLink,
+        uploadDate: new Date()
+      });
     }
-
-    // Size validation (e.g., 100MB limit)
-    const MAX_SIZE = 100 * 1024 * 1024; // 100MB in bytes
-    if (file.size > MAX_SIZE) {
-      return NextResponse.json(
-        { error: 'File size exceeds 100MB limit' },
-        { status: 400 }
-      );
-    }
-
-    // Convert file to buffer
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    // Process the zip file and get image links
-    const imageLinks = await processZipUpload(buffer, file.name);
-
-    // Prepare response data
-    const uploadData = {
-      folderName: file.name,
-      uploadDate: new Date(),
-      reviewsPerImage: parseInt(reviewsPerImage) || 3, // Default to 3 if not specified
-      targetedDemographic,
-      classificationType,
-      images: imageLinks,
-    };
-
-    // TODO: Add MongoDB storage here
-    // Example:
-    // await db.collection('uploads').insertOne(uploadData);
 
     return NextResponse.json({
-      message: 'Upload successful',
-      data: uploadData,
+      success: true,
+      data: {
+        folderId,
+        folderName,
+        images,
+        reviewsPerImage: parseInt(reviewsPerImage),
+        targetedDemographic,
+        classificationType
+      }
     });
 
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json(
-      { error: 'Upload failed. Please try again.' },
+      { error: 'Failed to process upload' },
       { status: 500 }
     );
   }
 }
-
-// Optional: Add configuration for larger file sizes
-export const config = {
-  api: {
-    bodyParser: false, // Disable the default body parser
-    responseLimit: '100mb',
-  },
-};

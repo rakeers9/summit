@@ -1,127 +1,102 @@
 import { google } from 'googleapis';
 import { Readable } from 'stream';
-import * as unzipper from 'unzipper';
 
-// Initialize Google Drive client
-const auth = new google.auth.GoogleAuth({
-  credentials: {
-    client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-  },
-  scopes: ['https://www.googleapis.com/auth/drive.file'],
-});
-
-const drive = google.drive({ version: 'v3', auth });
-
-interface UploadResult {
-  id: string;
-  link: string;
+export interface UploadFile {
+  name: string;
+  arrayBuffer: ArrayBuffer;
+  mimeType: string;
 }
 
-interface ImageLink {
-  filename: string;
-  driveId: string;
-  link: string;
-  uploadDate: Date;
-}
-
-// Create folder in Google Drive
-async function createFolder(folderName: string): Promise<string> {
-  const folderMetadata = {
-    name: folderName,
-    mimeType: 'application/vnd.google-apps.folder',
-  };
-
-  const folder = await drive.files.create({
-    requestBody: folderMetadata,
-    fields: 'id',
-  });
-
-  return folder.data.id!;
-}
-
-// Upload individual file to Google Drive
-async function uploadFile(
-  filename: string, 
-  mimeType: string, 
-  body: Readable, 
-  folderId: string
-): Promise<UploadResult> {
-  const fileMetadata = {
-    name: filename,
-    parents: [folderId],
-  };
-
-  const media = {
-    mimeType,
-    body,
-  };
-
-  const file = await drive.files.create({
-    requestBody: fileMetadata,
-    media,
-    fields: 'id,webViewLink',
-  });
-
-  return {
-    id: file.data.id!,
-    link: file.data.webViewLink!,
-  };
-}
-
-// Main function to process zip file
-export async function processZipUpload(
-  file: Buffer, 
-  folderName: string
-): Promise<ImageLink[]> {
-  // Create a folder in Google Drive
-  const folderId = await createFolder(folderName);
-  const imageLinks: ImageLink[] = [];
-
-  // Extract zip contents
-  const directory = await unzipper.Open.buffer(file);
-
-  // Process each file in the zip
-  for (const entry of directory.files) {
-    // Skip directories and non-image files
-    if (entry.type === 'Directory' || !entry.path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-      continue;
-    }
-
-    try {
-      // Get file buffer
-      const content = await entry.buffer();
-      const contentStream = Readable.from(content);
-
-      // Determine mime type from file extension
-      const extension = entry.path.split('.').pop()?.toLowerCase() || 'jpeg';
-      const mimeType = `image/${extension}`;
-
-      // Upload to Google Drive
-      const uploadResult = await uploadFile(
-        entry.path,
-        mimeType,
-        contentStream,
-        folderId
-      );
-
-      imageLinks.push({
-        filename: entry.path,
-        driveId: uploadResult.id,
-        link: uploadResult.link,
-        uploadDate: new Date(),
-      });
-    } catch (error) {
-      console.error(`Error processing file ${entry.path}:`, error);
-      // Continue with next file even if one fails
-      continue;
-    }
+function getAuth() {
+  try {
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        type: 'service_account',
+        project_id: process.env.GOOGLE_PROJECT_ID,
+        private_key: process.env.GOOGLE_PRIVATE_KEY!.split(String.raw`\n`).join('\n'),
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      },
+      scopes: ['https://www.googleapis.com/auth/drive.file'],
+    });
+    return auth;
+  } catch (error) {
+    console.error('Auth error:', error);
+    throw error;
   }
-
-  return imageLinks;
 }
 
-// Helper to validate zip file
-export function isValidZipFile(filename: string): boolean {
-  return filename.toLowerCase().endsWith('.zip');
+export async function createFolder(folderName: string): Promise<string> {
+  try {
+    const auth = getAuth();
+    const drive = google.drive({ version: 'v3', auth });
+
+    console.log('Creating folder:', folderName);
+    console.log('Parent folder:', process.env.GOOGLE_DRIVE_PARENT_FOLDER);
+
+    const folderMetadata = {
+      name: folderName,
+      mimeType: 'application/vnd.google-apps.folder',
+      parents: [process.env.GOOGLE_DRIVE_PARENT_FOLDER!],
+    };
+
+    const response = await drive.files.create({
+      requestBody: folderMetadata,
+      fields: 'id',
+    });
+
+    if (!response.data.id) {
+      throw new Error('Failed to create folder - no ID returned');
+    }
+
+    return response.data.id;
+  } catch (error) {
+    console.error('Error creating folder:', error);
+    throw error;
+  }
+}
+
+export async function uploadToDrive(file: UploadFile, folderId: string) {
+  try {
+    const auth = getAuth();
+    const drive = google.drive({ version: 'v3', auth });
+
+    console.log('Uploading file:', file.name);
+    console.log('To folder:', folderId);
+
+    const fileMetadata = {
+      name: file.name,
+      parents: [folderId],
+    };
+
+    const media = {
+      mimeType: file.mimeType,
+      body: Readable.from(Buffer.from(file.arrayBuffer)),
+    };
+
+    const response = await drive.files.create({
+      requestBody: fileMetadata,
+      media: media,
+      fields: 'id, webViewLink',
+    });
+
+    if (!response.data.id || !response.data.webViewLink) {
+      throw new Error('Failed to upload file - no ID or link returned');
+    }
+
+    await drive.permissions.create({
+      fileId: response.data.id,
+      requestBody: {
+        role: 'reader',
+        type: 'anyone',
+      },
+    });
+
+    return {
+      id: response.data.id,
+      webViewLink: response.data.webViewLink,
+    };
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    throw error;
+  }
 }
