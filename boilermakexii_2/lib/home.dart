@@ -86,10 +86,11 @@ class _HomePageState extends State<HomePage> {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: -20,
+                bottom: -100,
                 child: CarouselSlider(
                   options: CarouselOptions(
                     enlargeCenterPage: true,
+                    padEnds: false,
                     enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                     autoPlayAnimationDuration: Duration(seconds: 1),
                     autoPlayCurve: Curves.easeInOutCirc,

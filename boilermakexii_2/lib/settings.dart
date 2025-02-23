@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 Map<IconData, String> settingsOptions = {
   Icons.person_3_outlined: "Edit Profile",
   Icons.notifications_active_outlined: "Edit Notifications",
-  Icons.timer_outlined: "Modify Time",
+  Icons.money_outlined: "Bank Details",
   Icons.history: "History",
   Icons.report_gmailerrorred_rounded: "Report an error",
   Icons.star_rate_outlined: "Rate the App",
